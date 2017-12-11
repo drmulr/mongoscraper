@@ -12,7 +12,7 @@ var cheerio = require("cheerio");
 // Require all models
 var db = require("./models");
 
-var PORT = 3000;
+var PORT = process.env.PORT || 3000;
 
 // Initialize Express
 var app = express();
@@ -25,6 +25,16 @@ app.use(logger("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
 // Use express.static to serve the public folder as a static directory
 app.use(express.static("public"));
+
+// Set Handlebars.
+var exphbs = require("express-handlebars");
+
+app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.set("view engine", "handlebars");
+
+app.get('/', function (req, res) {
+  res.render('index');
+});
 
 // Set mongoose to leverage built in JavaScript ES6 Promises
 // Connect to the Mongo DB
@@ -50,8 +60,7 @@ app.get("/scrape", function(req, res) {
       result.title = $(this).text();
       result.link = $(this).children("a").attr("href");
       // Create a new Article using the `result` object built from scraping
-      db.Article
-        .create(result)
+      db.Article.create(result)
         .then(function(dbArticle) {
           // If we were able to successfully scrape and save an Article, send a message to the client
           // res.send("Scrape Complete");
@@ -118,6 +127,9 @@ app.post("/articles/:id", function(req, res) {
       res.json(err);
     });
 });
+
+
+
 
 // Start the server
 app.listen(PORT, function() {

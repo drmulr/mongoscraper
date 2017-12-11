@@ -3,16 +3,15 @@ $.getJSON("/articles", function(data) {
     // For each one
     for (var i = 0; i < data.length; i++) {
       // Display the apropos information on the page
-      var articleTitle = "<p data-id='" + data[i]._id + "'>" + data[i].title + "</p>";
-      var articlelink = "<div> <a href=" + data[i].link + ">" + data[i].link + "</a></div>";
+      var articleTitle = "<h4 class='mb-1' data-id='" + data[i]._id + "'>" + data[i].title + "</h4>";
+      var articlelink = "<a href=" + data[i].link + ">" + data[i].link + "</a>";
       var saveButton = "<button type='button' class='btn btn-secondary btn-sm'>" + "Save Article" + "</button>";
-      // "<a href>" + data[i].link + "</p>"
-      $("#articles").append(articleTitle);
-      $("#articles").append(articlelink);
-      $("#articles").append(saveButton);
-      
-
+      // $("#articles").append(articleTitle);
+      // $("#articles").append(articlelink);
+      // $("#articles").append(saveButton);
+      $("#articles").append('<div class="list-group"><a href="' + data[i].link + '" class="list-group-item list-group-item-action flex-column align-items-start"><div class="d-flex w-100 justify-content-between"><h5 class="mb-1">' + articleTitle + '</h5><small>3 days ago</small></div><p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p><small>' +  data[i].link + '</small></a></div>');
     }
+
   });
   
   

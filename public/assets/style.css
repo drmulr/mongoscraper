@@ -1,17 +1,17 @@
-/* body { background-color: #F2F6D0 } */
+/* body { background-color: #A1B113 } */
 
 
-#wrapper {
+/* #wrapper {
   width: 960px;
   margin-left: auto;
   margin-right: auto;
-  padding-top: 5%;
+  padding-top: 5%; */
 }
 #articles {
   display: inline-block;
-  overflow: auto;
-  width: 60%;
-  height: 700px;
+  /* overflow: auto; */
+  width: 100%;
+  /* height: 700px; */
 }
 #notes {
   float: right;

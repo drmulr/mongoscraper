@@ -2,6 +2,7 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
+var request = require("request");
 
 // Our scraping tools
 // Axios is a promised-based http library, similar to jQuery's Ajax method
@@ -47,32 +48,42 @@ mongoose.connect("mongodb://localhost/dmscrapermongo", {
 
 // A GET route for scraping the echojs website
 app.get("/scrape", function(req, res) {
-  // First, we grab the body of the html with request
-  axios.get("https://www.gizmodo.com/").then(function(response) {
-    // Then, we load that into cheerio and save it to $ for a shorthand selector
-    var $ = cheerio.load(response.data);
-
-    // Now, we grab every h2 within an article tag, and do the following:
+  // Make a request for the news section of ycombinator
+  request("https://www.gizmodo.com/", function(error, response, html) {
+    // Load the html body from request into cheerio
+    var $ = cheerio.load(html);
+    db.Article.remove();
+    // For each element with a "title" class
     $(".js_entry-title").each(function(i, element) {
-      // Save an empty result object
-      var result = {};
-      // Add the text and href of every link, and save them as properties of the result object
-      result.title = $(this).text();
-      result.link = $(this).children("a").attr("href");
-      // Create a new Article using the `result` object built from scraping
-      db.Article.create(result)
-        .then(function(dbArticle) {
-          // If we were able to successfully scrape and save an Article, send a message to the client
-          // res.send("Scrape Complete");
-          console.log("Scrape complete")
-          res.redirect('/');
-        })
-        .catch(function(err) {
-          // If an error occurred, send it to the client
-          res.json(err);
+      // Save the text and href of each link enclosed in the current element
+      var title = $(element).first().text();
+      var link = $(element).first().children("a").attr("href");
+
+      // If this found element had both a title and a link
+      if (title && link) {
+        // Insert the data in the scrapedData db
+        db.Article.create({
+          title: title,
+          link: link
+        },
+        function(err, inserted) {
+          if (err) {
+            // Log the error if one is encountered during the query
+            console.log(err);
+          }
+          else {
+            // Otherwise, log the inserted data
+            console.log(inserted);
+            
+
+          }
         });
+      }
     });
   });
+
+  // Send a "Scrape Complete" message to the browser
+  res.redirect("/");
 });
 
 // Route for getting all Articles from the db

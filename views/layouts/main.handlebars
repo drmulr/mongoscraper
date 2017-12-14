@@ -3,30 +3,33 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Scraping With Mongoose</title>
+    <title>Gizmodo Scraper</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
         crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="assets/style.css">
 </head>
 
 <body>
-    <!-- <div id="wrapper">
-        <h1>Note Scraper</h1>
-        <h2><i>If you can do this...the homework should be no problem.</i></h2>
-        <div id="articles"></div>
-        <div id="notes"></div>
-    </div> -->
-
-    <!-- ARTICLES ADDED MODAL SECTION -->
-    <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addedArticlesModal">
-        MODAL TESTING
-      </button> -->
-    {{{body}}}
-
-
-    <footer class="footer">
-        <p>&copy; 2017 Mulr.co</p>
-    </footer>
+    {{!-- NAVBAR AREA --}}
+    <div class="container">
+        <header class="header clearfix">
+            <nav>
+                <ul class="nav nav-pills float-right">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/saved">Saved Articles</a>
+                    </li>
+                </ul>
+            </nav>
+            <h3 class="text-muted">Gizmodo Scraper</h3>
+        </header>
+        {{{body}}} 
+    {{!-- FOOTER AREA --}}
+        <footer class="footer">
+            <p>&copy; 2017 Mulr.co</p>
+        </footer>
 
     </div>
     <!-- /container -->

@@ -7,7 +7,7 @@ var request = require("request");
 // Our scraping tools
 // Axios is a promised-based http library, similar to jQuery's Ajax method
 // It works on the client and on the server
-var axios = require("axios");
+// var axios = require("axios");
 var cheerio = require("cheerio");
 
 // Require all models
@@ -33,28 +33,37 @@ var exphbs = require("express-handlebars");
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
-app.get('/', function (req, res) {
-  res.render('index');
-});
-
 // Set mongoose to leverage built in JavaScript ES6 Promises
 // Connect to the Mongo DB
+
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/dmscrapermongo";
+
 mongoose.Promise = Promise;
-mongoose.connect("mongodb://localhost/dmscrapermongo", {
+mongoose.connect(MONGODB_URI, {
   useMongoClient: true
 });
 
 // Routes
 
-// A GET route for scraping the echojs website
+// HOME ROUTE - DISPLAY ALL ARTICLES
+app.get('/', function (req, res) {
+  db.Article.find({}).then(function(articles) {
+    console.log(articles);
+    res.render('index', { articles : articles });
+  })
+});
+
+// SCRAPE FOR NEW ARTICLES
 app.get("/scrape", function(req, res) {
   // Make a request for the news section of ycombinator
   request("https://www.gizmodo.com/", function(error, response, html) {
     // Load the html body from request into cheerio
     var $ = cheerio.load(html);
-    db.Article.remove();
-    // For each element with a "title" class
+    var count = 0;
+    db.Article.remove({}, function() {
+      // For each element with a "title" class
     $(".js_entry-title").each(function(i, element) {
+      count++;
       // Save the text and href of each link enclosed in the current element
       var title = $(element).first().text();
       var link = $(element).first().children("a").attr("href");
@@ -62,10 +71,7 @@ app.get("/scrape", function(req, res) {
       // If this found element had both a title and a link
       if (title && link) {
         // Insert the data in the scrapedData db
-        db.Article.create({
-          title: title,
-          link: link
-        },
+        db.Article.create({title: title, link: link},
         function(err, inserted) {
           if (err) {
             // Log the error if one is encountered during the query
@@ -74,17 +80,24 @@ app.get("/scrape", function(req, res) {
           else {
             // Otherwise, log the inserted data
             console.log(inserted);
-            
-
           }
         });
       }
     });
+      // Send a "Scrape Complete" message to the browser
+      res.json({ count: count });
+    });
   });
-
-  // Send a "Scrape Complete" message to the browser
-  res.redirect("/");
 });
+
+// GET ALL SAVED ARTICLES
+app.get("/saved", function (req, res) {
+  db.Article.find({}).then(function(articles) {
+    console.log(articles);
+    res.render('saved', { articles : articles });
+  })
+});
+
 
 // Route for getting all Articles from the db
 app.get("/articles", function(req, res) {
@@ -100,6 +113,7 @@ app.get("/articles", function(req, res) {
       res.json(err);
     });
 });
+
 
 // Route for grabbing a specific Article by id, populate it with it's note
 app.get("/articles/:id", function(req, res) {

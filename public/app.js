@@ -26,9 +26,20 @@ $("#getArticles").on("click", function () {
       $(".modal-body").append("You've added " + data.count + " articles!");
       $("#addedArticlesModal").modal("show");
     });
-    
+
 });
 
+$(".saveButton").on("click", function () {
+  var thisId = $(this).attr("data-id");
+  $.ajax({
+    method: "POST",
+    url: "/saveArticle/" + thisId
+  }).done(function (data) {
+      console.log(data);
+      //HOW TO UPDATE BUTTON TO SAY "SAVED" AFTER CLICK
+    });
+
+});
 
 // Whenever someone clicks a p tag
 // $(document).on("click", "p", function() {

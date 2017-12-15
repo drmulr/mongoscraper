@@ -92,11 +92,27 @@ app.get("/scrape", function(req, res) {
 
 // GET ALL SAVED ARTICLES
 app.get("/saved", function (req, res) {
-  db.Article.find({}).then(function(articles) {
+  db.Article.find({isSaved: true}).then(function(articles) {
     console.log(articles);
     res.render('saved', { articles : articles });
   })
 });
+
+
+//ARTICLE YOU'RE SAVING, SETS BOOLEAN = TRUE
+app.post("/saveArticle/:id", function (req, res){
+  db.Article.findOneAndUpdate({_id: req.params.id}, {isSaved:true})
+  .then(function(yes) {
+    // If we were able to successfully update an Article, send it back to the client
+    res.json(yes);
+  })
+  .catch(function(err) {
+    // If an error occurred, send it to the client
+    res.json(err);
+  });
+})
+
+
 
 
 // Route for getting all Articles from the db

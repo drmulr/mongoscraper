@@ -20,6 +20,7 @@
 </div>
 <!-- END ARTICLES ADDED MODAL SECTION -->
 
+
 <main role="main">
     <div class="jumbotron">
         <h1 class="display-3">Article Scraper</h1>
@@ -28,27 +29,21 @@
     </div>
 
     <div class="row">
-
         <div id="articles" class="col-lg-12">
             {{#each articles}}
             <div class="card">
-                {{!--
-                <h4 class="card-header">Featured</h4> --}}
+                {{!--<h4 class="card-header">Featured</h4> --}}
                 <div class="card-body">
-                    <h4 class="card-title">{{title}}</h4>
+                    <h4 class="card-title text-justify">{{title}}</h4>
                     <div class="row">
-
-                        <a href="{{link}}" class="col-lg-9">{{link}}</a>
-                        <button type="button" data-id="{{ _id }}" class="col-lg-3 btn btn-primary saveButton">Save</button>
+                        <a href="{{link}}" class="col-lg-9 font-weight-light">{{link}}</a>
+                        <button type="button" data-id="{{ _id }}" class="col-lg-3 btn btn-primary btn-sm saveButton">Save</button>
                     </div>
                     {{!--
                     <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> --}}
-
                 </div>
             </div>
             {{/each}}
         </div>
-
-
     </div>
 </main>

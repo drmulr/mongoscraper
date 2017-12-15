@@ -92,7 +92,7 @@ app.get("/scrape", function(req, res) {
 
 // GET ALL SAVED ARTICLES
 app.get("/saved", function (req, res) {
-  db.Article.find({isSaved: true}).then(function(articles) {
+  db.Article.find({"isSaved": true}).then(function(articles) {
     console.log(articles);
     res.render('saved', { articles : articles });
   })

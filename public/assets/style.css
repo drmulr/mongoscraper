@@ -33,6 +33,7 @@ textarea {
 
 .saveButton {
   margin-bottom: 5px;
+  max-width: 130px;
 }
 
 .navlink {

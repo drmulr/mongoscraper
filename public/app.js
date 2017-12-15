@@ -17,28 +17,34 @@ $("#getArticles").on("click", function () {
   $.ajax({
     method: "GET",
     url: "/scrape"
-  })
-    // With that done
-    .done(function (data) {
+  }).done(function (data) {
       console.log(data);
       // window.location.href = "/";
       // location.reload();
-      $(".modal-body").append("You've added " + data.count + " articles!");
+      $(".modal-body").append("<h6 class='text-center'>You've added " + data.count + " articles!</h6><br><p class='text-center'>Refresh page to see them.</p>");
       $("#addedArticlesModal").modal("show");
     });
-
 });
+
 
 $(".saveButton").on("click", function () {
   var thisId = $(this).attr("data-id");
+
   $.ajax({
     method: "POST",
     url: "/saveArticle/" + thisId
   }).done(function (data) {
       console.log(data);
-      //HOW TO UPDATE BUTTON TO SAY "SAVED" AFTER CLICK
-    });
+      
+      // if ( thisID === ) {
+      //   $(this thing).removeClass("btn-outline-primary").addClass("btn-secondary");
+      // }
 
+      // $(".saveButton").removeClass("btn-outline-primary").addClass("btn-secondary");
+      //HOW TO UPDATE BUTTON TO SAY "SAVED" AFTER CLICK
+      // window.redirect("/");
+
+  });
 });
 
 // Whenever someone clicks a p tag
